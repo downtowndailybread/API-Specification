@@ -1,0 +1,308 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Downtown Daily Bread Client Monitor",
+    "description": "The Downtown Daily Bread Client Montior is used to monitor the use of services provided by Downtown Daily Bread organization.",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8090/api/v1",
+      "description": "local server"
+    }
+  ],
+  "paths": {
+    "/client": {
+      "get": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Returns all clients and their attributes",
+        "responses": {
+          "200": {
+            "description": "returns all clients"
+          }
+        }
+      }
+    },
+    "/client/new": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "attribName",
+                    "attribValue"
+                  ],
+                  "properties": {
+                    "attribName": {
+                      "type": "string"
+                    },
+                    "attribValue": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": [
+                {
+                  "attribName": "name",
+                  "attribValue": "Andy Guenin"
+                },
+                {
+                  "attribName": "date_of_birth",
+                  "attribValue": "1990-01-01"
+                }
+              ]
+            }
+          }
+        },
+        "summary": "Creates a new client",
+        "responses": {
+          "200": {
+            "description": "the new client"
+          },
+          "400": {
+            "description": "the backend could not parse the json"
+          }
+        }
+      }
+    },
+    "/client/{id}": {
+      "get": {
+        "tags": [
+          "client"
+        ],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": "true",
+          "description": "client id",
+          "schema": {
+            "type": "string"
+          }
+        }],
+        "summary": "Gets the details about a specific client",
+        "responses": {
+          "200": {
+            "description": "the details on the client."
+          },
+          "400": {
+            "description": "the backend could not find a client of the specified id"
+          }
+        }
+      }
+    },
+    "/client/{id}/update": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": "true",
+          "description": "client id",
+          "schema": {
+            "type": "string"
+          }
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              },
+              "example": [
+                {
+                  "attribName": "name",
+                  "attribValue": "Andy Guenin"
+                },
+                {
+                  "attribName": "date_of_birth",
+                  "attribValue": "1990-01-01"
+                }
+              ]
+            }
+          }
+        },
+        "summary": "Gets the details about a specific client",
+        "responses": {
+          "200": {
+            "description": "the details on the client."
+          },
+          "400": {
+            "description": "the backend could not parse the json to update the client."
+          }
+        }
+      }
+    },
+    "/client/{id}/delete": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": "true",
+          "description": "client id",
+          "schema": {
+            "type": "string"
+          }
+        }],
+        "summary": "Deletes a client",
+        "responses": {
+          "200": {
+            "description": "Successfully deleted"
+          },
+          "400": {
+            "description": "Could not find an id"
+          }
+        }
+      }
+    },
+    "/clientAttributeType": {
+      "get": {
+        "tags": [
+          "client attribute type"
+        ],
+        "parameters": [],
+        "summary": "Gets all of the client attribute types",
+        "responses": {
+          "200": {
+            "description": "all of the client attribute types"
+          }
+        }
+      }
+    },
+    "/clientAttributeType/new": {
+      "post": {
+        "tags": [
+          "client attribute type"
+        ],
+        "summary": "Creates a new client attribute type",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ClientAttributeType"
+                }
+              },
+              "example": [
+                {
+                  "attribName": "name",
+                  "attribDisplayName": "Full name",
+                  "attribDataType": "string",
+                  "attribRequired": true,
+                  "attribRequiredForOnboarding": true,
+                  "ordering": 1
+                },
+                {
+                  "attribName": "date_of_birth",
+                  "attribDisplayName": "Date of birth",
+                  "attribDataType": "date",
+                  "attribRequired": true,
+                  "attribRequiredForOnboarding": true,
+                  "ordering": 2
+                }
+              ]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "all of the client attribute types"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ClientAttributeType": {
+        "type": "object",
+        "required": [
+          "attribName",
+          "attribDisplayName",
+          "attribDataType",
+          "attribRequired",
+          "attribRequiredForOnboarding",
+          "ordering"
+        ],
+        "properties": {
+          "attribName": {
+            "type": "string"
+          },
+          "attribDisplayName": {
+            "type": "string"
+          },
+          "attribDataType": {
+            "type": "string"
+          },
+          "attribRequired": {
+            "type": "boolean"
+          },
+          "attribRequiredForOnboarding": {
+            "type": "boolean"
+          },
+          "ordering": {
+            "type": "int"
+          }
+        }
+      },
+      "ClientAttribute": {
+        "type": "object",
+        "required": [
+          "type",
+          "value"
+        ],
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ClientAttributeType"
+          },
+          "value": {
+            "type": "object"
+          }
+        }
+      },
+      "Client": {
+        "type": "object",
+        "required": [
+          "id",
+          "attributes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientAttribute"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "client",
+      "description": "Client routes"
+    },
+    {
+      "name": "client attribute type",
+      "description": "Client attribute type routes"
+    }
+  ]
+}
