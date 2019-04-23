@@ -20,7 +20,31 @@
         "summary": "Returns all clients and their attributes",
         "responses": {
           "200": {
-            "description": "returns all clients"
+            "description": "an array of clients",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Client"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
           }
         }
       }
@@ -66,11 +90,36 @@
         },
         "summary": "Creates a new client",
         "responses": {
-          "200": {
-            "description": "the new client"
+          "202": {
+            "description": "successfully created the new client"
           },
           "400": {
-            "description": "the backend could not parse the json"
+            "description": "ClientInsertionError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientInsertionError",
+                  "message": "Could not insert client"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
           }
         }
       }
@@ -80,22 +129,56 @@
         "tags": [
           "client"
         ],
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": "true",
-          "description": "client id",
-          "schema": {
-            "type": "string"
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true",
+            "description": "client id",
+            "schema": {
+              "type": "string"
+            }
           }
-        }],
+        ],
         "summary": "Gets the details about a specific client",
         "responses": {
           "200": {
-            "description": "the details on the client."
+            "description": "the new client",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
           },
-          "400": {
-            "description": "the backend could not find a client of the specified id"
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "could not find a client of the specified id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientNotFound",
+                  "message": "Could not find client with id 12345"
+                }
+              }
+            }
           }
         }
       }
@@ -105,15 +188,17 @@
         "tags": [
           "client"
         ],
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": "true",
-          "description": "client id",
-          "schema": {
-            "type": "string"
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true",
+            "description": "client id",
+            "schema": {
+              "type": "string"
+            }
           }
-        }],
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -136,10 +221,56 @@
         "summary": "Gets the details about a specific client",
         "responses": {
           "200": {
-            "description": "the details on the client."
+            "description": "the client with the updated fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
           },
           "400": {
-            "description": "the backend could not parse the json to update the client."
+            "description": "ClientInsertionError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientInsertionError",
+                  "message": "Could not insert updated client records"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "could not find a client of the specified id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientNotFound",
+                  "message": "Could not find client with id 12345"
+                }
+              }
+            }
           }
         }
       }
@@ -149,22 +280,49 @@
         "tags": [
           "client"
         ],
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": "true",
-          "description": "client id",
-          "schema": {
-            "type": "string"
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true",
+            "description": "client id",
+            "schema": {
+              "type": "string"
+            }
           }
-        }],
+        ],
         "summary": "Deletes a client",
         "responses": {
           "200": {
-            "description": "Successfully deleted"
+            "description": "successfully deleted the client"
           },
-          "400": {
-            "description": "Could not find an id"
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "could not find a client of the specified id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientNotFound",
+                  "message": "Could not find client with id 12345"
+                }
+              }
+            }
           }
         }
       }
@@ -178,7 +336,31 @@
         "summary": "Gets all of the client attribute types",
         "responses": {
           "200": {
-            "description": "all of the client attribute types"
+            "description": "an array of all client attribute types",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientAttributeType"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
           }
         }
       }
@@ -220,8 +402,168 @@
           }
         },
         "responses": {
+          "202": {
+            "description": "the new client attribute type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientAttributeType"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ClientAttributeTypeInsertionError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientAttributeTypeInsertionError",
+                  "message": "Could not insert client attribute type"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientAttributeType/{attribName}/update": {
+      "post": {
+        "tags": [
+          "client attribute type"
+        ],
+        "summary": "updates a client attribute type based on its attribname",
+        "description": "this endpoint should mostly be used to update the display name of the attribute.",
+        "parameters": [
+          {
+            "name": "attribName",
+            "in": "path",
+            "required": "true",
+            "description": "client attribute type id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientAttributeType"
+              }
+            }
+          }
+        },
+        "responses": {
           "200": {
-            "description": "all of the client attribute types"
+            "description": "an array of all client attribute types",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientAttributeType"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ClientAttributeTypeInsertionError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientInsertionError",
+                  "message": "Could not insert updated client attribute type records"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "could not find a client attribute type of the specified attribName",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientAttributeTypeNotFound",
+                  "message": "Could not find client attribute type with attribName 'fullname'"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientAttributeType/{attribName}/delete": {
+      "post": {
+        "tags": [
+          "client attribute type"
+        ],
+        "summary": "Deletes a client attribute type",
+        "description": "This delete will not delete all client data associated with this attribute type. If you need to recover this data, re-create a clientattributetype with the same attribName",
+        "parameters": [
+          {
+            "name": "attribName",
+            "in": "path",
+            "required": "true",
+            "description": "client attribute type id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully deleted the client attribute type"
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
           }
         }
       }
@@ -256,7 +598,7 @@
             "type": "boolean"
           },
           "ordering": {
-            "type": "int"
+            "type": "integer"
           }
         }
       },
@@ -292,6 +634,30 @@
             }
           }
         }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "error",
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "ClientAttributeTypeAlreadyExists",
+              "ClientAttributeTypeInsertionError",
+              "ClientAttributeTypeNotFound",
+              "MissingData",
+              "ClientNotFound",
+              "ClientInsertionError",
+              "Unauthorized"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
       }
     }
   },
@@ -303,6 +669,14 @@
     {
       "name": "client attribute type",
       "description": "Client attribute type routes"
+    },
+    {
+      "name": "services",
+      "description": "services offered by downtown daily bread"
+    },
+    {
+      "name": "events",
+      "description": "specific instances of services"
     }
   ]
 }
