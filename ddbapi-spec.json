@@ -848,7 +848,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description",
+            "description":
             "the short id that this field will be referred to internally. it should be relatively short, descriptive, and contain only letters, numbers, and underscores"
           },
           "name": {
