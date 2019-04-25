@@ -549,10 +549,283 @@
           }
         }
       }
+    },
+    "/service": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Gets all services offered at Downtown Daily Bread",
+        "responses": {
+          "200": {
+            "description": "an array of all services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "service": {
+                        "$ref": "#/components/schemas/Service"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service/new": {
+      "post": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Creates a new service",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Service"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "the service has successfully been completed"
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service/{serviceId}/schedule": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Gets the schedules for a given service",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": "true",
+            "description": "service id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the schedules associated with this service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "the id of the schedule"
+                      },
+                      "schedule": {
+                        "$ref": "#/components/schemas/Schedule"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service/{serviceId}/schedule/new": {
+      "post": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Inserts a new schedule for a given service",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": "true",
+            "description": "service id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "the schedule has been created and associated with the specified service"
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service/{serviceId}/schedule/{scheduleId}/delete": {
+      "post": {
+        "tags": [
+          "service"
+        ],
+        "summary": "Gets the specific schedule for a given service",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": "true",
+            "description": "service id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": "true",
+            "description": "schedule id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the schedule has been deleted"
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "Schedule": {
+        "type": "object",
+        "required": [
+          "rrule",
+          "startTime",
+          "endTime"
+        ],
+        "properties": {
+          "rrule": {
+            "type": "string",
+            "description": "See https://github.com/jakubroztocil/rrule"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          }
+        }
+      },
+      "Service": {
+        "type": "object",
+        "required": [
+          "name",
+          "type",
+          "schedule"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "A service type is either of recurring or appointment. An recurring service is one that is open for clients to come in and out of whenever they need. They are scheduled according to a repeating schedule. An appointment service is a service that can be attended by a client, but is not specifically scheduled.",
+            "enum": [
+              "recurring",
+              "appointment"
+            ]
+          }
+        }
+      },
       "ClientAttributeTypeDatatype": {
         "type": "string",
         "enum": [
@@ -575,7 +848,8 @@
         "properties": {
           "id": {
             "type": "string",
-            "description", "the short id that this field will be referred to internally. it should be relatively short, descriptive, and contain only letters, numbers, and underscores"
+            "description":
+            "the short id that this field will be referred to internally. it should be relatively short, descriptive, and contain only letters, numbers, and underscores"
           },
           "name": {
             "type": "string"
@@ -598,7 +872,7 @@
         "type": "object",
         "required": [
           "clientAttributeTypeId",
-          "value",
+          "value"
         ],
         "properties": {
           "clientAttributeTypeId": {
@@ -663,12 +937,16 @@
       "description": "Client attribute type routes"
     },
     {
-      "name": "services",
+      "name": "service",
       "description": "services offered by downtown daily bread"
     },
     {
       "name": "events",
       "description": "specific instances of services"
+    },
+    {
+      "name": "schedule",
+      "description": "a schedule"
     }
   ]
 }
