@@ -571,7 +571,9 @@
     },
     "/event/{eventId}/delete": {
       "post": {
-        "tags": ["event"]
+        "tags": [
+          "event"
+        ]
       }
     },
     "/schedule/{scheduleId}/delete": {
@@ -966,6 +968,283 @@
           }
         }
       }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "gets all users",
+        "responses": {
+          "200": {
+            "description": "all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/new": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "summary": "Creates a new client",
+        "responses": {
+          "201": {
+            "description": "successfully created the new client"
+          },
+          "400": {
+            "description": "ClientInsertionError",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "ClientInsertionError",
+                  "message": "Could not insert client"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "views a specific user",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": "true",
+            "description": "the user id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user that was requested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "you are unauthorized to view the user"
+          }
+        }
+      }
+    },
+    "/user/{userId}/update": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "updates a specific user",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": "true",
+            "description": "the user id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "user deleted"
+          },
+          "401": {
+            "description": "you are unauthorized to view the user"
+          }
+        }
+      }
+    },
+    "/user/{userId}/delete": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "delete a user. you must be an administrator to do this",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": "true",
+            "description": "the user id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user deleted"
+          },
+          "401": {
+            "description": "you are unauthorized to delete the user"
+          },
+          "404": {
+            "description": "could not find the associated user"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "attempts to log a user in",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "logged in"
+          },
+          "401": {
+            "description": "the user has been locked out"
+          },
+          "404": {
+            "description": "could not find the associated user"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "logs a user out"
+      }
+    },
+    "/user/reset/{resetToken}": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "attempts to reset a user's password based on their reset token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "resetToken",
+            "in": "path",
+            "required": "true",
+            "description": "the reset token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "password reset"
+          },
+          "404": {
+            "description": "could not find the associated user"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1123,6 +1402,17 @@
             ]
           }
         }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
       }
     }
   },
@@ -1146,6 +1436,10 @@
     {
       "name": "service",
       "description": "NOT IMPLEMENTED YET - services offered by downtown daily bread"
+    },
+    {
+      "name": "user",
+      "description": "NOT IMPLEMENTED YET - users for logging into the site"
     }
   ]
 }
