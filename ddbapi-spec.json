@@ -550,6 +550,77 @@
         }
       }
     },
+    "/event/{eventId}": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Event information",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": "true",
+            "description": "event id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/event/{eventId}/delete": {
+      "post": {
+        "tags": ["event"]
+      }
+    },
+    "/schedule/{scheduleId}/delete": {
+      "post": {
+        "tags": [
+          "schedule"
+        ],
+        "summary": "Gets the specific schedule for a given service",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": "true",
+            "description": "service id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": "true",
+            "description": "schedule id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the schedule has been deleted"
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/service": {
       "get": {
         "tags": [
@@ -613,6 +684,51 @@
         "responses": {
           "201": {
             "description": "the service has successfully been completed"
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service/{serviceId}": {
+      "get": {
+        "tags": [
+          "service"
+        ],
+        "summary": "gets all information about a service (not finished yet, will include schedules, active events, and meta info)",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": "true",
+            "description": "service id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Service"
+                }
+              }
+            }
           },
           "401": {
             "description": "you are unauthorized to view this request",
@@ -735,7 +851,6 @@
         }
       }
     },
-
     "/service/{serviceId}/event": {
       "get": {
         "tags": [
@@ -759,9 +874,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
+                  "type": "array",
                   "items": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "the id of the event"
+                      },
+                      "event": {
+                        "$ref": "#/components/schemas/Event"
+                      }
+                    }
                   }
                 }
               }
@@ -784,13 +908,12 @@
         }
       }
     },
-
-    "/schedule/{scheduleId}/delete": {
+    "/service/{serviceId}/event/new": {
       "post": {
         "tags": [
-          "schedule"
+          "service"
         ],
-        "summary": "Gets the specific schedule for a given service",
+        "summary": "Manually creates a new event",
         "parameters": [
           {
             "name": "serviceId",
@@ -800,20 +923,32 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "scheduleId",
-            "in": "path",
-            "required": "true",
-            "description": "schedule id",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "startDate",
+                  "endDate"
+                ],
+                "properties": {
+                  "startDate": {
+                    "type": "string"
+                  },
+                  "endDate": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
-          "200": {
-            "description": "the schedule has been deleted"
+          "201": {
+            "description": "the event has been manually created"
           },
           "401": {
             "description": "you are unauthorized to view this request",
@@ -832,7 +967,6 @@
         }
       }
     }
-
   },
   "components": {
     "schemas": {
@@ -882,8 +1016,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description":
-            "the short id that this field will be referred to internally. it should be relatively short, descriptive, and contain only letters, numbers, and underscores"
+            "description": "the short id that this field will be referred to internally. it should be relatively short, descriptive, and contain only letters, numbers, and underscores"
           },
           "name": {
             "type": "string"
@@ -931,6 +1064,21 @@
             ]
           },
           "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "description": "Events are instances of a service",
+        "properties": {
+          "serviceId": {
+            "type": "string"
+          },
+          "startDateTime": {
+            "type": "string"
+          },
+          "endDateTime": {
             "type": "string"
           }
         }
@@ -988,16 +1136,16 @@
       "description": "Client attribute type routes"
     },
     {
-      "name": "service",
-      "description": "NOT IMPLEMENTED YET - services offered by downtown daily bread"
+      "name": "event",
+      "description": "NOT IMPLEMENTED YET - specific instances of services"
     },
     {
       "name": "schedule",
-      "description": "schedule endpoints"
+      "description": "NOT IMPLEMENTED YET - schedule endpoints"
     },
     {
-      "name": "events",
-      "description": "specific instances of services"
+      "name": "service",
+      "description": "NOT IMPLEMENTED YET - services offered by downtown daily bread"
     }
   ]
 }
