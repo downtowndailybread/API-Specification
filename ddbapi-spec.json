@@ -379,25 +379,7 @@
                 "items": {
                   "$ref": "#/components/schemas/ClientAttributeType"
                 }
-              },
-              "example": [
-                {
-                  "attribName": "name",
-                  "attribDisplayName": "Full name",
-                  "attribDataType": "string",
-                  "attribRequired": true,
-                  "attribRequiredForOnboarding": true,
-                  "ordering": 1
-                },
-                {
-                  "attribName": "date_of_birth",
-                  "attribDisplayName": "Date of birth",
-                  "attribDataType": "date",
-                  "attribRequired": true,
-                  "attribRequiredForOnboarding": true,
-                  "ordering": 2
-                }
-              ]
+              }
             }
           }
         },
@@ -571,30 +553,40 @@
   },
   "components": {
     "schemas": {
+      "ClientAttributeTypeDatatype": {
+        "type": "string",
+        "enum": [
+          "string",
+          "date",
+          "int",
+          "double"
+        ]
+      },
       "ClientAttributeType": {
         "type": "object",
         "required": [
-          "attribName",
-          "attribDisplayName",
-          "attribDataType",
-          "attribRequired",
-          "attribRequiredForOnboarding",
+          "id",
+          "name",
+          "datatype",
+          "required",
+          "requiredForOnboarding",
           "ordering"
         ],
         "properties": {
-          "attribName": {
+          "id": {
+            "type": "string",
+            "description", "the short id that this field will be referred to internally. it should be relatively short, descriptive, and contain only letters, numbers, and underscores"
+          },
+          "name": {
             "type": "string"
           },
-          "attribDisplayName": {
-            "type": "string"
+          "datatype": {
+            "$ref": "#/components/schemas/ClientAttributeTypeDatatype"
           },
-          "attribDataType": {
-            "type": "string"
-          },
-          "attribRequired": {
+          "required": {
             "type": "boolean"
           },
-          "attribRequiredForOnboarding": {
+          "requiredForOnboarding": {
             "type": "boolean"
           },
           "ordering": {
@@ -605,12 +597,12 @@
       "ClientAttribute": {
         "type": "object",
         "required": [
-          "type",
-          "value"
+          "clientAttributeTypeId",
+          "value",
         ],
         "properties": {
-          "type": {
-            "$ref": "#/components/schemas/ClientAttributeType"
+          "clientAttributeTypeId": {
+            "type": "string"
           },
           "value": {
             "type": "object"
