@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.2",
+  "openapi": "3.0.0",
   "info": {
     "title": "Downtown Daily Bread Client Monitor",
     "description": "The Downtown Daily Bread Client Montior is used to monitor the use of services provided by Downtown Daily Bread organization.",
@@ -11,6 +11,9 @@
       "description": "local server"
     }
   ],
+  "security": {
+    "bearerAuth": []
+  },
   "paths": {
     "/client": {
       "get": {
@@ -60,29 +63,17 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "required": [
-                    "attribName",
-                    "attribValue"
-                  ],
-                  "properties": {
-                    "attribName": {
-                      "type": "string"
-                    },
-                    "attribValue": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ClientAttribute"
                 }
               },
               "example": [
                 {
-                  "attribName": "name",
-                  "attribValue": "Andy Guenin"
+                  "id": "name",
+                  "value": "Andy Guenin"
                 },
                 {
-                  "attribName": "date_of_birth",
-                  "attribValue": "1990-01-01"
+                  "id": "date_of_birth",
+                  "value": "1990-01-01"
                 }
               ]
             }
@@ -207,12 +198,12 @@
               },
               "example": [
                 {
-                  "attribName": "name",
-                  "attribValue": "Andy Guenin"
+                  "id": "name",
+                  "value": "Andy Guenin"
                 },
                 {
-                  "attribName": "date_of_birth",
-                  "attribValue": "1990-01-01"
+                  "id": "date_of_birth",
+                  "value": "1990-01-01"
                 }
               ]
             }
@@ -1009,7 +1000,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -1158,10 +1160,10 @@
         }
       }
     },
-    "/user/login": {
+    "/authenticate": {
       "post": {
         "tags": [
-          "user"
+          "user authentication"
         ],
         "summary": "attempts to log a user in",
         "requestBody": {
@@ -1183,7 +1185,19 @@
         },
         "responses": {
           "200": {
-            "description": "logged in"
+            "description": "Confirmation Code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "the user has been locked out"
@@ -1194,30 +1208,23 @@
         }
       }
     },
-    "/user/logout": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "logs a user out"
-      }
-    },
-    "/user/reset/{resetToken}": {
+    "/authenticate/confirm": {
       "post": {
         "tags": [
-          "user"
+          "user authentication"
         ],
-        "summary": "attempts to reset a user's password based on their reset token",
+        "summary": "Confirms that a user has control of a given email account.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["email", "token"],
                 "properties": {
                   "email": {
                     "type": "string"
                   },
-                  "password": {
+                  "token": {
                     "type": "string"
                   }
                 }
@@ -1225,20 +1232,9 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "resetToken",
-            "in": "path",
-            "required": "true",
-            "description": "the reset token",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
-            "description": "password reset"
+            "description": "linkage has been approved"
           },
           "404": {
             "description": "could not find the associated user"
@@ -1248,6 +1244,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "Client": {
         "type": "object",
@@ -1270,11 +1273,11 @@
       "ClientAttribute": {
         "type": "object",
         "required": [
-          "clientAttributeTypeId",
+          "id",
           "value"
         ],
         "properties": {
-          "clientAttributeTypeId": {
+          "id": {
             "type": "string"
           },
           "value": {
@@ -1440,6 +1443,10 @@
     {
       "name": "user",
       "description": "NOT IMPLEMENTED YET - users for logging into the site"
+    },
+    {
+      "name": "user authentication",
+      "description": "Authentication endpoints"
     }
   ]
 }
