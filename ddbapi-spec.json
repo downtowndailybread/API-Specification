@@ -1209,7 +1209,7 @@
         }
       }
     },
-    "/authenticate/tokenValid": {
+    "/authenticate/validateToken": {
       "post": {
         "tags": ["user authentication"],
         "summary": "Is this token valid for password resets",
