@@ -567,53 +567,6 @@
         ]
       }
     },
-    "/schedule/{scheduleId}/delete": {
-      "post": {
-        "tags": [
-          "schedule"
-        ],
-        "summary": "Gets the specific schedule for a given service",
-        "parameters": [
-          {
-            "name": "serviceId",
-            "in": "path",
-            "required": "true",
-            "description": "service id",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "scheduleId",
-            "in": "path",
-            "required": "true",
-            "description": "schedule id",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "the schedule has been deleted"
-          },
-          "401": {
-            "description": "you are unauthorized to view this request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": {
-                  "error": "Unauthorized",
-                  "message": "You are unauthorized to receive a response"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/service": {
       "get": {
         "tags": [
@@ -626,18 +579,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "service": {
-                        "$ref": "#/components/schemas/Service"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/Service"
                 }
               }
             }
@@ -669,14 +611,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Service"
+                "$ref": "#/components/schemas/ServiceAttribute"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "the service has successfully been completed"
+            "description": "the service has successfully been completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Id"
+                }
+              }
+            }
           },
           "401": {
             "description": "you are unauthorized to view this request",
@@ -740,12 +689,59 @@
         }
       }
     },
-    "/service/{serviceId}/schedule": {
-      "get": {
+    "/service/{serviceId}/update": {
+      "post": {
         "tags": [
           "service"
         ],
-        "summary": "Gets the schedules for a given service",
+        "summary": "updates service information",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": "true",
+            "description": "service id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceAttribute"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "updated"
+          },
+          "401": {
+            "description": "you are unauthorized to view this request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Unauthorized",
+                  "message": "You are unauthorized to receive a response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service/{serviceId}/delete": {
+      "post": {
+        "tags": [
+          "service"
+        ],
+        "summary": "gets all information about a service (not finished yet, will include schedules, active events, and meta info)",
         "parameters": [
           {
             "name": "serviceId",
@@ -759,26 +755,7 @@
         ],
         "responses": {
           "200": {
-            "description": "the schedules associated with this service",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "the id of the schedule"
-                      },
-                      "schedule": {
-                        "$ref": "#/components/schemas/Schedule"
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            "description": "delete the service"
           },
           "401": {
             "description": "you are unauthorized to view this request",
@@ -844,12 +821,12 @@
         }
       }
     },
-    "/service/{serviceId}/event": {
-      "get": {
+    "/service/{serviceId}/schedule/{scheduleId}/update": {
+      "post": {
         "tags": [
           "service"
         ],
-        "summary": "Gets all of the events for a given service",
+        "summary": "updates a schedule for a given service",
         "parameters": [
           {
             "name": "serviceId",
@@ -859,30 +836,29 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": "true",
+            "description": "schedule id",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "all of the events associated with this service",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "description": "the id of the event"
-                      },
-                      "event": {
-                        "$ref": "#/components/schemas/Event"
-                      }
-                    }
-                  }
-                }
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schedule"
               }
             }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "the schedule updated"
           },
           "401": {
             "description": "you are unauthorized to view this request",
@@ -901,12 +877,12 @@
         }
       }
     },
-    "/service/{serviceId}/event/new": {
+    "/service/{serviceId}/schedule/{scheduleId}/delete": {
       "post": {
         "tags": [
           "service"
         ],
-        "summary": "Manually creates a new event",
+        "summary": "Deletes a new schedule for a given service",
         "parameters": [
           {
             "name": "serviceId",
@@ -916,32 +892,20 @@
             "schema": {
               "type": "string"
             }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "startDate",
-                  "endDate"
-                ],
-                "properties": {
-                  "startDate": {
-                    "type": "string"
-                  },
-                  "endDate": {
-                    "type": "string"
-                  }
-                }
-              }
+          },
+          {
+            "name": "scheduleId",
+            "in": "path",
+            "required": "true",
+            "description": "schedule id",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "201": {
-            "description": "the event has been manually created"
+            "description": "the schedule has been deleted"
           },
           "401": {
             "description": "you are unauthorized to view this request",
@@ -1219,7 +1183,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["email", "token"],
+                "required": [
+                  "email",
+                  "token"
+                ],
                 "properties": {
                   "email": {
                     "type": "string"
@@ -1365,46 +1332,88 @@
           }
         }
       },
+      "Id": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "description": "an object id",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
       "Schedule": {
         "type": "object",
         "required": [
           "rrule",
-          "startTime",
-          "endTime"
+          "enabled"
         ],
         "properties": {
           "rrule": {
             "type": "string",
             "description": "See https://github.com/jakubroztocil/rrule"
           },
-          "startTime": {
-            "type": "string"
-          },
-          "endTime": {
-            "type": "string"
+          "enabled": {
+            "type": "boolean"
           }
         }
       },
       "Service": {
         "type": "object",
         "required": [
-          "name",
-          "type",
           "schedule"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/ServiceAttribute"
+          },
+          "schedules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "detail"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "detail": {
+                  "$ref": "#/components/schemas/Schedule"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ServiceAttribute": {
+        "type": "object",
+        "required": [
+          "name",
+          "type"
         ],
         "properties": {
           "name": {
             "type": "string"
           },
           "type": {
-            "type": "string",
-            "description": "A service type is either of recurring or appointment. An recurring service is one that is open for clients to come in and out of whenever they need. They are scheduled according to a repeating schedule. An appointment service is a service that can be attended by a client, but is not specifically scheduled.",
-            "enum": [
-              "recurring",
-              "appointment"
-            ]
+            "$ref": "#/components/schemas/ServiceType"
           }
         }
+      },
+      "ServiceType": {
+        "type": "string",
+        "description": "A service type is either of recurring or appointment. An recurring service is one that is open for clients to come in and out of whenever they need. They are scheduled according to a repeating schedule. An appointment service is a service that can be attended by a client, but is not specifically scheduled.",
+        "enum": [
+          "Recurring",
+          "Appointment"
+        ]
       },
       "User": {
         "type": "object",
@@ -1433,12 +1442,8 @@
       "description": "NOT IMPLEMENTED YET - specific instances of services"
     },
     {
-      "name": "schedule",
-      "description": "NOT IMPLEMENTED YET - schedule endpoints"
-    },
-    {
       "name": "service",
-      "description": "NOT IMPLEMENTED YET - services offered by downtown daily bread"
+      "description": "services offered by downtown daily bread"
     },
     {
       "name": "user",
