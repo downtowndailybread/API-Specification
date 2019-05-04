@@ -1348,12 +1348,20 @@
         "type": "object",
         "required": [
           "rrule",
+          "start_time",
+          "end_time",
           "enabled"
         ],
         "properties": {
           "rrule": {
             "type": "string",
             "description": "See https://github.com/jakubroztocil/rrule"
+          },
+          "start_time": {
+            "$ref": "#/components/schemas/Time"
+          },
+          "end_time": {
+            "$ref": "#/components/schemas/Time"
           },
           "enabled": {
             "type": "boolean"
@@ -1415,13 +1423,43 @@
           "Appointment"
         ]
       },
+      "Time": {
+        "type": "object",
+        "required": ["hour", "minute", "second"],
+        "properties": {
+          "hour": {
+            "type": "integer"
+          },
+          "minute": {
+            "type": "integer"
+          },
+          "second": {
+            "type": "integer"
+          }
+        }
+      },
       "User": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
           "email": {
+            "type": "string"
+          },
+          "userLock": {
+            "type": "boolean"
+          },
+          "adminLock": {
+            "type": "boolean"
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "resetToken": {
             "type": "string"
           }
         }
