@@ -1521,7 +1521,7 @@
     },
     {
       "name": "user",
-      "description": "NOT IMPLEMENTED YET - users for logging into the site"
+      "description": "users for logging into the site"
     },
     {
       "name": "user authentication",
