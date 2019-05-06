@@ -1208,6 +1208,80 @@
           }
         }
       }
+    },
+    "/authenticate/validateToken": {
+      "post": {
+        "tags": ["user authentication"],
+        "summary": "Is this token valid for password resets",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "token"],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "a true or false value on whether the token is the correct token for the given email address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "could not find the associated user"
+          }
+        }
+      }
+    },
+    "/authenticate/resetPassword": {
+      "post": {
+        "tags": ["user authentication"],
+        "summary": "Resets the password for this user with a given reset token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "token", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "token": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user has successfully been updated"
+          },
+          "404": {
+            "description": "could not find the associated user"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1485,7 +1559,7 @@
     },
     {
       "name": "user",
-      "description": "NOT IMPLEMENTED YET - users for logging into the site"
+      "description": "users for logging into the site"
     },
     {
       "name": "user authentication",
