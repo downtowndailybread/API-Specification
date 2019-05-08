@@ -1486,6 +1486,9 @@
           },
           "type": {
             "$ref": "#/components/schemas/ServiceType"
+          },
+          "defaultCapacity": {
+            "type": "integer"
           }
         }
       },
