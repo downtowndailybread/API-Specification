@@ -1437,6 +1437,9 @@
           "end_time": {
             "$ref": "#/components/schemas/Time"
           },
+          "capacity": {
+            "type": "integer"
+          },
           "enabled": {
             "type": "boolean"
           }
