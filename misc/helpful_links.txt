@@ -1,0 +1,8 @@
+TODO: Make this into a README for setup
+
+
+For easily setting up swagger locally:
+    https://idratherbewriting.com/learnapidoc/pubapis_swagger.html
+
+For setting up postgres through docker:
+    https://hackernoon.com/dont-install-postgres-docker-pull-postgres-bee20e200198

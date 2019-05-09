@@ -1,0 +1,64 @@
+{
+    "clients": [
+		{"id": "0f3a1516-9baf-4769-85f7-210ba16e8440", "attributes": [
+			{"clientAttributeTypeId": "bd4e849a-a065-4716-9b53-a6b6daf600e4",
+			 "value": "Andy Guenin"
+            },
+			{"clientAttributeTypeId": "1a9cc552-879f-4659-bdbb-3ed8769ca4a8",
+			 "value": "1990-01-01"
+            },
+			{"clientAttributeTypeId": "8180f422-b6e8-4c8e-ba3e-5abb0e6071b5",
+			 "value": 29
+            },
+			{"clientAttributeTypeId": "bd610286-1f78-4ce1-8cbb-719bc38c0552",
+			 "value": 123
+            }]
+        },
+		{"id": "0f3a1516-9baf-4769-85f7-210ba16e8440", "attributes": [
+			{"clientAttributeTypeId": "bd4e849a-a065-4716-9b53-a6b6daf600e4",
+			 "value": "Martin Donaldson"
+            },
+			{"clientAttributeTypeId": "1a9cc552-879f-4659-bdbb-3ed8769ca4a8",
+			 "value": "1970-01-01"
+            },
+			{"clientAttributeTypeId": "bd610286-1f78-4ce1-8cbb-719bc38c0552",
+			 "value": 234
+            }]
+        }
+    ],
+    "clientAttributeTypes": [
+		{"id": "bd4e849a-a065-4716-9b53-a6b6daf600e4",
+		 "name": "name",
+         "datatype": "string",
+         "required": true,
+         "requiredForOnboarding": true,
+         "ordering": 0
+        }, {"id": "1a9cc552-879f-4659-bdbb-3ed8769ca4a8",
+		 "name": "date_of_birth",
+         "datatype": "string",
+         "required": true,
+         "requiredForOnboarding": true,
+         "ordering": 1
+        }, {"id": "8180f422-b6e8-4c8e-ba3e-5abb0e6071b5",
+		 "name": "age",
+         "datatype": "number",
+         "required": false,
+         "requiredForOnboarding": false,
+         "ordering": 2
+        }, {"id": "bd610286-1f78-4ce1-8cbb-719bc38c0552",
+		 "name": "other_id_number",
+         "datatype": "number",
+         "required": false,
+         "requiredForOnboarding": true,
+         "ordering": 4
+        }
+    ],
+
+    "events": [
+
+    ],
+
+    "services": [
+
+    ]
+}
