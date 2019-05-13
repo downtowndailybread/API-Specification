@@ -1,5 +1,5 @@
 {
-    "clients": [
+    "client": [
 		{"id": "0f3a1516-9baf-4769-85f7-210ba16e8440", "attributes": [
 			{"clientAttributeTypeId": "bd4e849a-a065-4716-9b53-a6b6daf600e4",
 			 "value": "Andy Guenin"
@@ -26,7 +26,7 @@
             }]
         }
     ],
-    "clientAttributeTypes": [
+    "clientAttributeType": [
 		{"id": "bd4e849a-a065-4716-9b53-a6b6daf600e4",
 		 "name": "name",
          "datatype": "string",
@@ -54,11 +54,38 @@
         }
     ],
 
-    "events": [
-
+    "event": [
+        {
+            "id": "iad00ada0-8463-4cc6-ad85-0ecd9fc882d3",
+            "event": {
+              "serviceId": "c017f1bf-469c-4e7e-82f5-4d2f30186296",
+              "startDateTime": "10:00:00.000Z",
+              "endDateTime": "11:00:00.000Z"
+            }
+          }
     ],
 
-    "services": [
+    "service": [
+        {"id": "693f8c8e-49a6-47e5-982b-1f1dccf374ac",
+         "service": {
+             "name": "Service 1",
+             "schedule": "recurring"
+         }}, {"id": "c017f1bf-469c-4e7e-82f5-4d2f30186296",
+         "service": {
+             "name": "Service 2",
+             "schedule": "one time"
+         }}
+    ],
 
+    "schedule": [
+        {
+            "id": "eefed618-d553-4c7a-8ada-ceb6654d9324",
+            "schedule": {
+                "rrule": "",
+                "startTime": "08:00:00.000Z",
+                "endTime": "14:00:00.000Z"
+            },
+            "serviceId": "693f8c8e-49a6-47e5-982b-1f1dccf374ac"
+        }
     ]
 }
