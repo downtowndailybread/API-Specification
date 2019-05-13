@@ -1437,6 +1437,9 @@
           "end_time": {
             "$ref": "#/components/schemas/Time"
           },
+          "capacity": {
+            "type": "integer"
+          },
           "enabled": {
             "type": "boolean"
           }
@@ -1486,6 +1489,9 @@
           },
           "type": {
             "$ref": "#/components/schemas/ServiceType"
+          },
+          "defaultCapacity": {
+            "type": "integer"
           }
         }
       },
