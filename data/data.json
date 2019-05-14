@@ -56,7 +56,7 @@
 
     "events": [
 
-    "service": [
+    "services": [
         {"id": "693f8c8e-49a6-47e5-982b-1f1dccf374ac",
          "service": {
              "name": "Service 1",
@@ -72,7 +72,7 @@
          }}
     ],
 
-    "schedule": [
+    "schedules": [
         {
             "id": "eefed618-d553-4c7a-8ada-ceb6654d9324",
             "schedule": {
