@@ -56,9 +56,31 @@
 
     "events": [
 
+    "services": [
+        {"id": "693f8c8e-49a6-47e5-982b-1f1dccf374ac",
+         "service": {
+             "name": "Service 1",
+             "schedule": {
+                 "rrule": "RRULE:FREQ=DAILY",
+                 "startTime": "08:00:00.000Z",
+                 "endTime": "14:00:00.000Z"
+             }
+         }}, {"id": "c017f1bf-469c-4e7e-82f5-4d2f30186296",
+         "service": {
+             "name": "Service 2",
+             "schedule": null
+         }}
     ],
 
-    "services": [
-
+    "schedules": [
+        {
+            "id": "eefed618-d553-4c7a-8ada-ceb6654d9324",
+            "schedule": {
+                "rrule": "RRULE:FREQ=DAILY",
+                "startTime": "08:00:00.000Z",
+                "endTime": "14:00:00.000Z"
+            },
+            "serviceId": "693f8c8e-49a6-47e5-982b-1f1dccf374ac"
+        }
     ]
 }
